@@ -1,0 +1,221 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% load coinTags %}
+{% load favTags %}
+
+{% block title %}
+
+    company details - Wiki Company
+
+{% endblock %}
+
+{% block navbar-companies-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <!-- The Grid -->
+
+    <div class="w3-row-padding" ; style="margin-top:70px" xmlns:pred="http://wikicompany.pt/pred/" xmlns:company="http://wikicompany.pt/company/"  about="company:{{ company.companySymbol|lower }}" typeof="company">
+
+        <!-- Left Column -->
+        <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">
+
+                <!-- Yellow star -->
+                <div class="w3-container">
+                    {% if request.user.is_authenticated %}
+                        {% isFavouriteCompany request.user.id company.companySymbol as isFav %}
+                        {% if isFav %}
+                            <a href="/unfavorite/company/{{ company.companySymbol }}/?last={{ request.path }}">
+                                <i  style="color: #fdd835;font-size: 2rem;display: block;"
+                                class="material-icons right" id="favIcon"
+                                onmouseover="mouseOver()" onmouseout="mouseOut()">star</i>
+                            </a>
+                        {% else %}
+                            <a href="/favorite/company/{{ company.companySymbol }}/?last={{ request.path }}">
+                                <i  style="color: #fdd835;font-size: 2rem;display: block;"
+                            class="material-icons right" id="favIcon"
+                            onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                            </a>
+                        {% endif %}
+
+                     {% else %}
+                        <a href="/favorite/company/{{ company.companySymbol }}/?last={{ request.path }}">
+                            <i  style="color: #fdd835;font-size: 2rem;display: block;"
+                            class="material-icons right" id="favIcon"
+                            onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- RDFa -->
+
+
+                    <!-- Icon -->
+                    <div class=" w3-display-container">
+                        <br>
+                            <img property="pred:logo" src="{% if 'http' in company.companyLogo %}{{ company.companyLogo }}{% else %}{% static "images/" %}{{ company.companyLogo }}{% endif %}"
+                             style=" display: block;margin-left: auto;margin-right: auto; max-width:150px; max-height:100px "
+                             alt="Avatar" class="center">
+
+                        <br>
+                    </div>
+
+                    <!-- Company information -->
+                    <div class="w3-container">
+                        <!-- Name and Symbol -->
+                        <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-black"><span property="pred:name">{{ company.companyName }}</span>   (<span property="pred:symbol">{{ company.companySymbol }}</span>)</i>
+                        </p>
+                        <hr>
+
+                        <!------------------------>
+                        <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Company Information</b>
+                        </p>
+
+                        <!-- Industry -->
+                        <h4>Industry : </h4>
+                        <span property="pred:industry"><a href="/companies?industry={{ company.companyIndustry | title }}">{{ company.companyIndustry | title }}</a></span>
+
+                        <!-- CEO -->
+                        <h4>CEO : </h4>
+                        <ul>
+                            {% if company.ceoName %}
+                                <li><a href="/ceos/{{ company.ceoName }}">{{ company.ceoName }}</a></li>
+                                <span property="pred:ceo" href="{{ company.companyCeo }}" hidden></span>
+                            {% else %}
+                            <li property="pred:ceo">{{ company.companyCeo }}</li>
+                            {% endif %}
+                        </ul>
+
+                        <!-- Founder -->
+                        <h4>Founder: </h4>
+                        <span property="pred:foundedBy"><a href="/companies?founder={{ company.companyFounder }}">{{ company.companyFounder }}</a></span>
+
+                        <!-- Foundation year-->
+                        <h4>Foundation year: </h4>
+                        <span property="pred:foundingYear"><a href="/companies?foundingYear={{ company.companyFoundingYear }}">{{ company.companyFoundingYear }}</a></span>
+
+                        <!-- Country -->
+                        <h4>Country</h4>
+                        <span property="pred:country"><a href="/companies?country={{ company.companyCountry }}">{{ company.companyCountry }}</a></span>
+
+                        <!-- WebSite -->
+                        <h4>WebSite</h4>
+                        <a property="pred:website" href="{{ company.companyWebsite }}">{{ company.companyWebsite }}</a>
+
+                        <!-- Wikidata Reference -->
+                        <h4>Wikidata Reference</h4>
+                        <span property="pred:wikidataRef" ><a href="https://www.wikidata.org/wiki/{{ company.companyWikiRef }}">{{ company.companyWikiRef }}</a></span>
+
+                        <!-- Description -->
+                        <h4>Description : </h4>
+                        <a property="pred:description">{{ company.companyDescription }} </a>
+
+                        <br>
+
+                        <br>
+                    </div>
+
+
+
+            </div>
+            <br>
+
+            <!-- End Left Column -->
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <canvas id="searchChart" width="600" height="250"></canvas>
+                <br>
+            </div>
+
+            {% if request.user.is_superuser %}
+            <div class="row center">
+                        <a class="waves-effect waves-light btn-large" href="/admin/editCompany/?companySymbol={{ company.companySymbol }}"><i
+                                class="material-icons left">edit</i>Edit</a>
+
+                        <a class="waves-effect waves-light btn-large" href="/admin/deleteCompany/?companySymbol={{ company.companySymbol }}"><i
+                                class="material-icons left">delete_forever</i>Delete</a>
+            </div>
+               {% endif %}
+        </div>
+
+
+        <!-- End Right Column -->
+
+
+
+
+    <!-- End Grid -->
+    </div>
+{% endblock %}
+
+{% block chartConfiguration %}
+    <script>
+        var ctx = document.getElementById("searchChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            'data': {
+                'labels': [ {% for rev in revenues %}
+                                {{ rev.revenueYear }},
+                            {% endfor %}],
+                'datasets': [{
+                    "label": "{{ company.companySymbol }}",
+                    "data":[ {% for rev in revenues %}
+                                {{ rev.revenueValue }},
+                            {% endfor %}],
+                    "fill": false,
+                    "backgroundColor": "rgba(255, 99, 132, 0.2)",
+                    "borderColor": "rgb(255, 99, 132)",
+                    "borderWidth": 1
+                }]
+            },
+            "options": {
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            return value.toLocaleString() + "{% getCoinSymbol request.session.selected_coin %}";
+                        }
+                    } // end callbacks:
+                }, //end tooltips
+                "scales": {
+                    "yAxes": [{
+                        "ticks": {
+                            "beginAtZero": true,
+                            callback: function (value, index, values) {
+                                return value.toLocaleString() + "{% getCoinSymbol request.session.selected_coin %}";
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block  materializeStarts %}
+    <script>
+        function mouseOver() {
+            var elem = document.getElementById("favIcon");
+            if (elem.innerHTML === "star")
+                elem.innerHTML = "star_border";
+            else
+                elem.innerHTML = "star";
+        }
+
+        function mouseOut() {
+            var elem = document.getElementById("favIcon");
+            if (elem.innerHTML === "star")
+                elem.innerHTML = "star_border";
+            else
+                elem.innerHTML = "star";
+        }
+    </script>
+{% endblock %}

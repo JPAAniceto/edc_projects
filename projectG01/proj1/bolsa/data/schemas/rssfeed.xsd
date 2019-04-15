@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="rss" type="rssType"/>
+  <xs:complexType name="imageType">
+    <xs:sequence>
+      <xs:element type="xs:integer" name="height"/>
+      <xs:element type="xs:string" name="link"/>
+      <xs:element type="xs:string" name="title"/>
+      <xs:element type="xs:string" name="url"/>
+      <xs:element type="xs:integer" name="width"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="guidType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="isPermaLink" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="itemType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="description"/>
+      <xs:element type="guidType" name="guid"/>
+      <xs:element type="xs:string" name="link"/>
+      <xs:element type="xs:string" name="pubDate"/>
+      <xs:element type="xs:string" name="title"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="channelType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="copyright"/>
+      <xs:element type="xs:string" name="description"/>
+      <xs:element type="imageType" name="image"/>
+      <xs:element type="itemType" name="item" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="xs:string" name="language"/>
+      <xs:element type="xs:string" name="lastBuildDate"/>
+      <xs:element type="xs:string" name="link"/>
+      <xs:element type="xs:string" name="title"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="rssType">
+    <xs:sequence>
+      <xs:element type="channelType" name="channel"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="version"/>
+  </xs:complexType>
+</xs:schema>

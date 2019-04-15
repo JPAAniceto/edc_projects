@@ -1,0 +1,17 @@
+<coins>
+    <coin>
+        <name>Euro</name>
+        <code>eur</code>
+        <symbol>€</symbol>
+    </coin>
+    <coin>
+        <name>Pound Sterling</name>
+        <code>gbp</code>
+        <symbol>£</symbol>
+    </coin>
+    <coin>
+        <name>Japanese Yen</name>
+        <code>jpy</code>
+        <symbol>¥</symbol>
+    </coin>
+</coins>

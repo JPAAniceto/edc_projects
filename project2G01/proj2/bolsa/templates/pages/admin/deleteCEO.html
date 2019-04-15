@@ -1,0 +1,78 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+
+{% block title %}
+    Delete CEO - Wiki Company
+{% endblock %}
+
+{% block navbar-admin-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+
+            <h2 class="center" style="margin-bottom: 50px">Delete CEO</h2>
+            <div class="row">
+                <form method="GET">
+                    <div class="input-field col s4">
+                        <input id="searchQuery" type="text" class="validate" value="{{ ceoName }}"
+                               name="ceoName">
+                        <label for="searchQuery">Ceo name</label>
+                    </div>
+                    <div class="input-field col s4 center">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Get Data
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </form>
+                {% if request.GET.ceoName %}
+                    <div class="col s4">
+                        {% if ceoName %}
+                            <h4 style="color:green" class="left">{{ ceoName }}</h4>
+                        {% else %}
+                            <h4 style="color:red" class="left">No CEO found with that value</h4>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        <div class="divider"></div>
+        {% if ceoName %}
+            <form action="" method="post">
+            {% csrf_token %}
+                <div class="row section">
+                    <div class="input-field col s2">
+                        <input id="ceoName" type="text" class="validate" value="{{ ceoName }}"
+                               name="ceoName" required readonly hidden>
+
+                    </div>
+                </div>
+                <div class="row">
+                    {% if message %}
+                        <h4 style="color:red" class="center">{{ message }}</h4>
+                    {% endif %}
+                    {% if success %}
+                        <h4 style="color:green" class="center">CEO Deleted</h4>
+                    {% endif %}
+                    <div class="col s12 center">
+                        <h4 style="color:red" >ARE YOU SURE YOU WANT TO DELETE THE CEO? </h4>
+                    </div>
+                    <div class="input-field col s6 ">
+                        <button class="btn waves-effect waves-light right" type="submit" name="action">YES
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                    <div class="input-field col s6 ">
+                        <a href="/admin/deleteCEO/"><button class="btn waves-effect waves-light">NO
+                            <i class="material-icons right">send</i>
+                        </button></a>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

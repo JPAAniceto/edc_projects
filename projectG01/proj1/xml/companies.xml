@@ -1,0 +1,83 @@
+<companys>
+    <company>
+        <name>Tesla</name>
+        <symbol>TSLA</symbol>
+        <logo>Tesla.png</logo>
+        <type>Automotive</type>
+        <year>2003</year>
+        <description>Founded in 2003 by a group of engineers who wanted to prove that people did not need to compromise to drive electric, that electric vehicles can be better, quicker and more fun to drive than gasoline cars. </description>
+    </company>
+    <company>
+        <name>Galp Energia</name>
+        <symbol>GALP.LS</symbol>
+        <logo>Galp.jpg</logo>
+        <type>Energy</type>
+        <year>1991</year>
+        <description>A Portuguese corporation which consists of more than 100 companies engaged in activities such as natural gas supply, regasification, transport, storage, and distribution; petroleum products exploration, production, refining, trading, logistics and retailing; co-generation and renewable energy.</description>
+    </company>
+    <company>
+        <name>Apple Inc.</name>
+        <symbol>AAPL</symbol>
+        <logo>Apple.png</logo>
+        <type>Technology</type>
+        <year>1976</year>
+        <description>Designs, develops, and sells consumer electronics, computer software, and online services</description>
+    </company>
+    <company>
+        <name>Netflix Inc.</name>
+        <symbol>NFLX</symbol>
+        <logo>Netflix.png</logo>
+        <type>Technology</type>
+        <year>1996</year>
+        <description>The company's primary business is its subscription-based streaming media service which offers online streaming of a library of films and television programs</description>
+    </company>
+    <company>
+        <name>Advanced Micro Devices Inc.</name>
+        <symbol>AMD</symbol>
+        <logo>AMD.png</logo>
+        <type>Technology</type>
+        <year>1969</year>
+        <description>Advanced Micro Devices, Inc. engages in the provision of semiconductor businesses</description>
+    </company>
+    <company>
+        <name>Jerónimo Martins</name>
+        <symbol>JMT.LS</symbol>
+        <logo>JMT.svg</logo>
+        <type>Retail</type>
+        <year>1792</year>
+        <description>Is a Portuguese corporate group that operates in food distribution and specialised retail.</description>
+    </company>
+    <company>
+        <name>Walmart Inc.</name>
+        <symbol>WMT</symbol>
+        <logo>Walmart.svg</logo>
+        <type>Retail</type>
+        <year>1962</year>
+        <description>An American multinational retail corporation that operates a chain of hypermarkets, discount department stores, and grocery stores</description>
+    </company>
+    <company>
+        <name>Amazon.com, Inc.</name>
+        <symbol>AMZN</symbol>
+        <logo>Amazon.png</logo>
+        <type>Online shopping</type>
+        <year>1994</year>
+        <description>Is an American electronic commerce and cloud computing company.</description>
+    </company>
+    <company>
+        <name>General Motors Company</name>
+        <symbol>GM</symbol>
+        <logo>Gm.png</logo>
+        <type>Automotive</type>
+        <year>1908</year>
+        <description>Is an American multinational corporation headquartered in Detroit that designs, manufactures, markets, and distributes vehicles and vehicle parts, and sells financial services.</description>
+    </company>
+    <company>
+        <name>ExxonMobil</name>
+        <symbol>XOM</symbol>
+        <logo>Exxon.svg</logo>
+        <type>Energy</type>
+        <year>1999</year>
+        <description>Is an American multinational oil and gas corporation headquartered in Irving, Texas. It is the largest direct descendant of John D. Rockefeller's Standard Oil Company, and was formed on November 30, 1999 by the merger of Exxon (formerly the Standard Oil Company of New Jersey) and Mobil (formerly the Standard Oil Company of New York).</description>
+    </company>
+</companys>
+

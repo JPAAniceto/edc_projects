@@ -1,0 +1,133 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% load favTags %}
+
+{% block title %}
+
+    CEO Info - Wiki Company
+
+{% endblock %}
+
+{% block navbar-ceos-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <!-- First Grid: Logo & About -->
+    <div class="w3-row" xmlns:pred="http://wikicompany.pt/pred/" xmlns:ceo="http://wikicompany.pt/ceo/" xmlns:company="http://wikicompany.pt/company/" about="{{ ceo.ceo }}" typeof="ceo">
+         <!-- RDFa -->
+            <div class="w3-half  w3-container w3-center">
+
+                    <!-- Name -->
+                    <div class="w3-container" style="margin-top:50px">
+                        <h2 style="margin-bottom: 30px"><span property="pred:name">{{ ceo.ceoName }}</span>
+
+                        <!-- Yellow star -->
+                        {% if request.user.is_authenticated %}
+                            {% isFavouriteCEO request.user.id ceo.ceoName as isFav %}
+                            {% if isFav %}
+                                <a href="/unfavorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}">
+                                    <i  style="color: #fdd835;font-size: 2rem;"
+                                    class="material-icons" id="favIcon"
+                                    onmouseover="mouseOver()" onmouseout="mouseOut()">star</i>
+                                </a>
+                            {% else %}
+                                <a href="/favorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}">
+                                    <i  style="color: #fdd835;font-size: 2rem;"
+                                class="material-icons" id="favIcon"
+                                onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                </a>
+                            {% endif %}
+
+                             {% else %}
+                                <a href="/favorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}">
+                                    <i  style="color: #fdd835;font-size: 2rem;"
+                                    class="material-icons" id="favIcon"
+                                    onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                </a>
+                        {% endif %}
+
+                        </h2>
+
+                    </div>
+
+                    <!-- Photo/ Description -->
+                    <div class="w3-container">
+                        <img property="pred:photo" src="{% if 'http' in ceo.ceoPhoto %}{{ ceo.ceoPhoto }}{% else %}{% static "images/" %}{{ ceo.ceoPhoto }}{% endif %}" class="w3-margin w3-circle" style="width:40%">
+                    </div>
+                    <div class="w3-left-align w3-padding-large">
+                        <p style="text-align: center" property="pred:description">{{ ceo.ceoDescription }}</p>
+
+                    </div>
+
+            </div>
+
+            <!-- Left Container || Information -->
+            <div class=" w3-half  w3-container">
+                <div class=" w3-center" style="padding: 74px">
+                    <div class="w3-white w3-text-grey w3-card-4 w3-centered-align w3-padding-large">
+                        <ul>
+                            <!-- Sex -->
+                            <li><h4>Sex:</h4> <span property="pred:sex"><a href="/ceos?sex={{ ceo.ceoSex|title }}">{{ ceo.ceoSex | title }}</a></li></span>
+
+                            <!-- Nationality -->
+                            <li><h4>Nationality:</h4>
+                                {% for nationality in nationalities %}
+                                    <span property="pred:nationality"><a href="/ceos?nationality={{ nationality.ceoNationality }}">{{ nationality.ceoNationality }}<br></a></span>
+                                {% endfor %}
+                            </li>
+
+                            <!-- Birth -->
+                            <li><h4>Birth</h4> <a property="pred:birth">{{ ceo.ceoBirth }}</a></li>
+
+                            <!-- Worth -->
+                            <li><h4>Worth</h4> <a property="pred:worth">{{ ceo.ceoWorth }}</a></li>
+
+                            <!-- Wikidata Ref -->
+                            <li><h4>Wikidata Reference</h4> <a property="pred:wikidataRef" href="https://www.wikidata.org/wiki/{{ ceo.ceoWiki }}">{{ ceo.ceoWiki }}</a></li>
+
+                            <!-- Companies -->
+                            <li ><h4>CEO of:</h4>
+                                {% for company in companies %}
+                                    <span about="company:{{ company.companySymbol|lower }}" property="pred:name"><a href="/companies/{{ company.companySymbol }}">{{ company.companyName }}<br></a></span>
+                                    <span rev="pred:ceo" href="http://wikicompany.pt/company/{{ company.companySymbol|lower }}" hidden>company:{{ company.companySymbol|lower }}</span>
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% if request.user.is_superuser %}
+                <div class="row center">
+                    <a class="waves-effect waves-light btn-large" href="/admin/editCEO/?ceoName={{ ceo.ceoName }}"><i
+                            class="material-icons left">edit</i>Edit</a>
+
+                    <a class="waves-effect waves-light btn-large" href="/admin/deleteCEO/?ceoName={{ ceo.ceoName }}"><i
+                            class="material-icons left">delete_forever</i>Delete</a>
+                </div>
+           {% endif %}
+    </div>
+
+
+
+{% endblock %}
+
+{% block  materializeStarts %}
+    <script>
+        function mouseOver() {
+            var elem = document.getElementById("favIcon");
+            if (elem.innerHTML === "star")
+                elem.innerHTML = "star_border";
+            else
+                elem.innerHTML = "star";
+        }
+
+        function mouseOut() {
+            var elem = document.getElementById("favIcon");
+            if (elem.innerHTML === "star")
+                elem.innerHTML = "star_border";
+            else
+                elem.innerHTML = "star";
+        }
+    </script>
+{% endblock %}

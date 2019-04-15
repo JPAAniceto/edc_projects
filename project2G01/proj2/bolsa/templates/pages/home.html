@@ -1,0 +1,119 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+{% block title %}
+    Home - Wiki Company
+{% endblock %}
+
+{% block navbar-home-active %}
+    active
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <div class="row center-align">
+            <img class="responsive-img" style="max-width: 80%" src="{% static 'images/lul.png' %}">
+        </div>
+        <div class="row">
+            <div class="col s4">
+                <div class="center">
+                    <a href="/companies">
+                        <i style="color: #607d8b;font-size: 5rem;display: block" class="material-icons">business</i>
+                        <p style="font-size: 1.7rem">See company info</p>
+                        <p class="light center">You can check the company before buying stock to assure yourself that
+                            you are making the right call</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="center">
+                    <a href="/values">
+                        <i style="color: #607d8b;font-size: 5rem;display: block" class="material-icons">trending_up</i>
+                        <p style="font-size: 1.7rem">See company's revenue evolution</p>
+                        <p class="light center">Check the revenue and filter them to compare and check if a company grew
+                            or feel down </p>
+                    </a>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="center">
+                    <a href="/ceos">
+                        <i style="color: #607d8b;font-size: 5rem;display: block" class="material-icons">assignment_ind</i>
+                        <p style="font-size: 1.7rem">See CEO info</p>
+                        <p class="light center">You will be able to know more datails about Comapnies CEO.</p>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div style="text-align: center; margin-top: 30px" class="col s12">
+            <h2>Companies with biggest revenue:</h2>
+        </div>
+        <div class="col s12 card">
+            <table class="sortable highlight">
+                <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th class="sorttable_numeric">Revenue (2017)</th>
+                    <th>CEO</th>
+                </tr>
+                </thead>
+                <tbody xmlns:pred="http://wikicompany.pt/pred/">
+                {% for company in highRevenue %}
+                    <tr about="{{ company.company }}" typeof="company">
+                        <td property="pred:name"><a href="/companies/{{ company.symbol }}">{{ company.companyName }}</a></td>
+                        <td rel="pred:revenue">
+                            <span rel="pred:revenueValues">
+                                <div property="pred:Year" hidden>2017</div>
+                                <div property="pred:Value">{{ company.value }}</div>
+                            </span>
+                        </td>
+                        {% if company.ceoName %}
+                        <td property="pred:ceo" href="{{ company.ceo }}"> <a href="/ceos/{{ company.ceoName }}">{{ company.ceoName }}</a></td>
+                        {% else %}
+                            <td rel="pred:ceo">{{ company.ceo }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <div style="text-align: center; margin-top: 30px;" class="col s12">
+            <h2>Companies with lowest revenue:</h2>
+        </div>
+        <div class="col s12 card">
+            <table class="sortable highlight">
+                <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th class="sorttable_numeric">Revenue (2017)</th>
+                    <th>CEO</th>
+                </tr>
+                </thead>
+                <tbody xmlns:pred="http://wikicompany.pt/pred/">
+                {% for company in lowRevenue %}
+                    <tr about="{{ company.company }}" typeof="company">
+                        <td property="pred:name"><a href="/companies/{{ company.symbol }}">{{ company.companyName }}</a></td>
+                        <td rel="pred:revenue">
+                            <span rel="pred:revenueValues">
+                                <div property="pred:Year" hidden>2017</div>
+                                <div property="pred:Value">{{ company.value }}</div>
+                            </span>
+                        </td>
+                        {% if company.ceoName %}
+                        <td property="pred:ceo" href="{{ company.ceo }}"> <a href="/ceos/{{ company.ceoName }}">{{ company.ceoName }}</a></td>
+                        {% else %}
+                            <td rel="pred:ceo">{{ company.ceo }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+{% endblock %}

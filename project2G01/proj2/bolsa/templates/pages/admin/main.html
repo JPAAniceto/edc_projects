@@ -1,0 +1,77 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+
+{% block title %}
+    Admin - Wiki Company
+{% endblock %}
+
+{% block navbar-admin-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+
+            <h2 class="center" style="margin-bottom: 50px">Admin Actions</h2>
+            <div class="col s4">
+                <div class="row center">
+                    <i class="material-icons" style="font-size: 6rem;color: #607d8b;">business</i>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/addCompany"><i
+                            class="material-icons left">add_circle</i>Add a company</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/editCompany"><i
+                            class="material-icons left">edit</i>Edit a company</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/deleteCompany"><i
+                            class="material-icons left">delete</i>Delete a company</a>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="row center">
+                    <i class="material-icons" style="font-size: 6rem;color: #607d8b;">assignment_ind</i>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/addCEO"><i
+                            class="material-icons left">add_circle</i>Add a CEO</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/editCEO"><i
+                            class="material-icons left">edit</i>Edit a CEO</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/deleteCEO"><i
+                            class="material-icons left">delete</i>Delete a CEO</a>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="row center">
+                    <i class="material-icons" style="font-size: 6rem;color: #607d8b;">euro_symbol</i>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/addCoin"><i
+                            class="material-icons left">add_circle</i>Add a coin</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/deleteCoin"><i
+                            class="material-icons left">delete</i>Delete a coin</a>
+                </div>
+            </div>
+
+            </div>
+            <div class="row"><div class="col s4">
+                <div class="row center">
+                    <i class="material-icons" style="font-size: 6rem;color: #607d8b;">import_export</i>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                    <a class="waves-effect waves-light btn" href="/admin/exportDB"><i
+                            class="material-icons left">cloud_download</i>Export triples</a>
+                </div></div>
+        </div>
+    </div>
+{% endblock %}

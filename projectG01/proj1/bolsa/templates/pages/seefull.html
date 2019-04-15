@@ -1,0 +1,170 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% load randomGen %}
+{% block title %}
+
+    {{ type }} - Bolsa Client
+
+{% endblock %}
+
+{% block navbar-portfolio-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    {% getCoinSymbol request.session.selectedCoin as coinSymbol %}
+    {% getCoinValue request.session.selectedCoin as coinValue %}
+     <!-- The Grid -->
+
+  <div class="w3-row-padding"; style="margin-top:70px">
+
+    <!-- Left Column -->
+    <div class="w3-third">
+       <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h3 style="text-align: center;">Overview</h3>
+            {%  if type == "Wallet" %}
+                <p id="toggle" style="text-align: center;">
+                    <span>
+                        <label class="btn btn-primary active">
+                            <input type="radio" name="options" id="option1"> Amount
+                        </label>
+                    </span>
+                    <span>
+                        <label class="btn btn-primary">
+                            <input type="radio" name="options" id="option2"> Value
+                        </label>
+                    </span>
+                </p>
+                <div id="left"> <canvas id="searchChart" width="600" height="250"></canvas> </div>
+                <div id="right" style="display:none;"> <canvas id="searchChart_money" width="600" height="250"></canvas> </div>
+            {% else %}
+                <h2 style="text-align: center;">Number of {{ type }}</h2>
+                <canvas id="searchChart" width="600" height="250"></canvas>
+            {% endif %}
+            <div style="text-align: center;">
+                <br>
+                <button class="btn waves-effect red darken-4">
+                    <a href="/portfolio/">Go Back</a>
+                    <i class="material-icons left">arrow_back</i>
+                </button>
+                <br>
+            </div>
+        </div>
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+
+    <div class="w3-twothird">
+
+        <!-- Full table-->
+        <h3 style="text-align: center;">{{ type }}</h3>
+        <table class="sortable">
+            <thead>
+            <tr>
+                <th>Symbol</th>
+                {%  if type != "Wallet" %}
+                    <th>Date</th>
+                {% endif %}
+                <th class="sorttable_numeric">Amount</th>
+                {%  if type == "Wallet" %}
+                    <th class="sorttable_numeric">Value</th>
+                {% endif %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td><a href="/companies/{{ item.symbol }}">{{ item.symbol }}</a></td>
+                    {%  if type != "Wallet" %}
+                        <td>{{ item.date }}</td>
+                    {% endif %}
+                    <td>{{ item.amount }}
+                        {% if type == "Wallet" %}
+                            <td>{% multiplyDouble item.value coinValue %}{{ coinSymbol }}</td>
+                        {% endif %}
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+    <!-- End Right Column -->
+    </div>
+
+  <!-- End Grid -->
+  </div>
+{% endblock %}
+
+
+{% block chartConfiguration %}
+    {% getCoinSymbol request.session.selectedCoin as coinSymbol %}
+    {% getCoinValue request.session.selectedCoin as coinValue %}
+    <script>
+        var ctx = document.getElementById("searchChart");
+        var ctxm = document.getElementById("searchChart_money");
+        var symbols = [];
+        var amounts = [];
+        var values = [];
+        var colors = [];
+
+        {% if type == "Wallet" %}
+            {% for item in items %}
+                symbols.push("{{  item.symbol }}");
+                amounts.push({{  item.amount }});
+                values.push({% multiplyTriple item.amount item.value coinValue %});
+                colors.push('rgb({% randomInt 0 255 %},{% randomInt 0 255 %},{% randomInt 0 255 %})');
+            {% endfor %}
+        {% else %}
+            {% for item in stock %}
+                symbols.push("{{  item.symbol }}");
+                amounts.push({{  item.totalamount }});
+                colors.push('rgb({% randomInt 0 255 %},{% randomInt 0 255 %},{% randomInt 0 255 %})');
+            {% endfor %}
+        {% endif %}
+
+        var myLineChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: symbols,
+                datasets: [
+                    {
+                        data: amounts,
+                        backgroundColor: colors
+                    },
+                ]
+            },
+            options: {}
+        });
+
+        {% if type == "Wallet" %}
+            var myLineChartm = new Chart(ctxm, {
+                type: 'doughnut',
+                data: {
+                    labels: symbols,
+                    datasets: [
+                        {
+                            data: values,
+                            backgroundColor: colors
+                        },
+                    ]
+                },
+                options: {}
+            });
+        {% endif %}
+    </script>
+
+    <script>
+        $(function() {
+            $('#toggle > span').click(function() {
+                var ix = $(this).index();
+
+                $('#left').toggle( ix === 0 );
+                $('#right').toggle( ix === 1 );
+            });
+        });
+    </script>
+
+
+
+{% endblock %}

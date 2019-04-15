@@ -1,0 +1,16 @@
+1 - Check if you have all the requirements:
+	Run "pip install requirements.txt"
+	OR
+	Install manually
+
+2 - Start BaseX Server
+
+3 - Run Django Project
+	Import to a project in Pycharm proj1 folder which contains all django project
+	OR
+	Run "python manage.py runserver"
+
+
+Considerations:
+
+BaseX database is created dynamically on each Django start. bolsa/baseX_db.py contains all this code

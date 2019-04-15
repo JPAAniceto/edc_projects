@@ -1,0 +1,58 @@
+{% load static %}
+{% load randomGen %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Bolsa Client {% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" href="{%  static 'images/favicon.ico' %}">
+    <script src="{% static 'js/sorttable.js' %}"></script>
+</head>
+<body>
+<ul id="dropdown1" class="dropdown-content">
+    {% getCoins as coins %}
+    <li><a href="/selectCoin/usd/?last={{ request.path }}">$</a></li>
+    {% for k,v in coins.items %}
+    <li><a href="/selectCoin/{{ k }}/?last={{ request.path }}">{{ v }}</a></li>
+    {% endfor %}
+</ul>
+<nav class="green">
+  <div class="nav-wrapper">
+
+    <a href="/" class="brand-logo right">Bolsa Client<i style="font-size: 4rem;" class="material-icons right">attach_money</i></a>
+    <ul class="left hide-on-med-and-down">
+        <li class="{% block navbar-home-active %}{% endblock %}"><a href="/"><i class="material-icons left">home</i>Home</a></li>
+        <li class="{% block navbar-values-active %}{% endblock %}"><a href="/values/"><i class="material-icons left">timeline</i>Values</a></li>
+        <li class="{% block navbar-companies-active %}{% endblock %}"><a href="/companies"><i class="material-icons left">business</i>Companies</a></li>
+        <li class="{% block navbar-portfolio-active %}{% endblock %}"><a href="/portfolio"><i
+                class="material-icons left">account_balance_wallet</i>My Portfolio</a></li>
+        {% if request.user.is_superuser %}
+            <li class="{% block navbar-admin-active %}{% endblock %}"><a href="/adminxml/main"><i class="material-icons left">how_to_reg</i>Admin</a></li>
+        {% endif %}
+    </ul>
+      <ul class="right" style="margin-right: 300px">
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">
+              {% if request.session.selectedCoin != 'usd' and request.session.selectedCoin %}
+                  {% getCoinSymbol request.session.selectedCoin %}
+              {% else %}
+                  $
+              {% endif %}<i class="material-icons right">arrow_drop_down</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+{% block body %}
+{% endblock %}
+
+{% include 'components/loadScripts.html' %}
+
+{% block chartConfiguration %}
+{% endblock %}
+
+{% block materializeStarts %}
+{% endblock %}
+
+<script>$(".dropdown-trigger").dropdown();</script>
+</body>
+</html>

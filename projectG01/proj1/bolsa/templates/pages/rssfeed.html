@@ -1,0 +1,71 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+{% block title %}
+
+    {{ title }} Rss Feed - Bolsa Client
+
+{% endblock %}
+
+{% block navbar-companies-active %}
+    active
+{% endblock %}
+
+{% block body %}
+     <!-- The Grid -->
+
+  <div class="w3-row-padding"; style="margin-top:70px">
+
+    <!-- Left Column -->
+    <div class="w3-third">
+      <div class="w3-white w3-text-grey w3-card-4">
+        <div class="w3-display-container">
+            <br>
+          <img src="{% static "images/" %}{{ company.logo }}" style=" display: block;margin-left: auto;margin-right: auto; max-width:150px; max-height:100px " alt="Avatar">
+                <br>
+        </div>
+        <div class="w3-container">
+
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-black">{{company.name}} ({{ company.symbol }})</i></p>
+          <hr>
+
+          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Company Information</b></p>
+          <h4>Foundation year: </h4>
+            <a>{{ company.year }}</a>
+           <h4>Field : </h4>
+            <a>{{ company.type }}</a>
+          <h4>Description : </h4>
+            <a>{{ company.description }}</a>
+          <br>
+
+          <br>
+        </div>
+
+      </div><br>
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+
+    <div class="w3-twothird">
+
+        <!-- One div for each item-->
+        {% for item in items %}
+               <div class="w3-twothird">
+
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <h4><a href="{{ item.link }}">{{ item.title | safe }}</a></h4>
+                        <p>{{ item.pubDate }}</p>
+                        <p>{{ item.description | safe }}</p>
+
+                    </div>
+              </div>
+        {% endfor %}
+
+    <!-- End Right Column -->
+    </div>
+
+  <!-- End Grid -->
+  </div>
+{% endblock %}
+

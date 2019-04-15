@@ -1,0 +1,78 @@
+TP2 - EDC
+
+This work will focus more on companies and showing their info. Companies values and buy/sell will be out/stripped. Given the use of rdf, this will be more appropriate and easier to perform.
+My Portfolio will be replaced by a page that shows the companies/ceo's favorited by a user. 
+Coin selector will use a API specified below.
+All values (total revenue only) will be adjusted to usd$ in DB.
+We'll try to reuse TP1 as much as possible, mostly frontend.
+
+Main features:
+	See companies and their info
+	Sort though them with advanced menu search
+	Favorite company page so you can't lose it
+	Dynamically fill info from Wikidata when admin tries to add company
+	Graphs for the total revenue by year for each company
+	Ability for the admin to add/edit/delete company from DB
+
+Page changes/updates:
+Home:
+	Tables are replaced by a single table with top total revenue for 2017
+Values (possibly requires name change):
+	Page that has a search = companiesSearch/filter, and the result shows a bar graph of the total revenue for 2017/company
+Companies:
+	Search/filter by with an advanced menu:
+		Industria
+		CEO
+		Founded by
+		Founding year
+		Country
+		Total Revenue (2017)
+CompaniesInfo:
+	Graph shows total revenue/year
+	Show star if user logged in to favorite company or CEO
+	Show edit/delete button if user is admin
+CEOinfo
+    Show star if user logged in to favorite company or CEO
+	Show edit/delete button if user is admin
+My Profile(Portfolio):
+	Shows name, favorite pages and CEO's with button to unfavorite
+Admin page:
+	Add company - User writes symbol, app fills the rest of the form with data from wikidata. User can change it before submitting
+	Remove company - Button to this page appears on each companyInfo page, and goes to a page where a form is already filled in.
+	Edit Company - Button to this page appears on each companyInfo page, and goes to a page where a form is already filled in.
+
+DB (N3 format) (predicates will probably be the same from wikidata or equivalent created by us)
+Company:
+	Name (Label)
+	Symbol
+	Website
+	Wikidata Reference
+	Total Revenue 
+		Year
+		Value
+	Industry
+	CEO
+	Founded by
+	Founding year
+	Country
+	Description
+	Logo
+
+CEO:
+	Name
+	Photo
+	Description
+	Sex
+	Nationality
+	Date of birth
+	Net Worth Estimate
+	
+User: 
+	ID
+	Name
+	Favorite Companies
+	Favorite Personalities
+
+TO GET COIN VALUES	
+Forex exchange
+https://www.freeforexapi.com/api/live?pairs=EURUSD,USDEUR,USDKRW

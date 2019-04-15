@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="days" type="daysType"/>
+  <xs:complexType name="dateType">
+    <xs:sequence>
+      <xs:element name="day">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+              <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+        <xs:element name="month">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+              <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+        <xs:element name="year">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+              <xs:totalDigits value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="stockType">
+    <xs:sequence>
+      <xs:element name="symbol">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value">
+        <xs:simpleType>
+          <xs:restriction base="xs:decimal">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="coinType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+             <xs:maxLength value="3" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value">
+        <xs:simpleType>
+          <xs:restriction base="xs:decimal">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="updateType" mixed="true">
+    <xs:sequence>
+      <xs:element type="dateType" name="date"/>
+      <xs:element type="stockType" name="stock" maxOccurs="unbounded" minOccurs="2"/>
+      <xs:element type="coinType" name="coin" maxOccurs="unbounded" minOccurs="2"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="daysType">
+    <xs:sequence>
+      <xs:element type="updateType" name="update" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

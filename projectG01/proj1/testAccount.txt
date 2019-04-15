@@ -1,0 +1,9 @@
+Account to test (is Superuser):
+
+Username:
+shiro
+
+Password:
+bolsa12345
+
+Accounts require strong password requirements (Django default requirements). Minimum 8chars and letters+numbers

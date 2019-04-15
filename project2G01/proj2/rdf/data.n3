@@ -1,0 +1,91 @@
+@prefix company: <http://wikicompany.pt/companies/>.
+@prefix ceo: <http://wikicompany.pt/ceo/>.
+@prefix user: <http://wikicompany.pt/user/>.
+@prefix coin: <http://wikicompany.pt/coin/>.
+@prefix pred: <http://wikicompany.pt/pred/>.
+
+company:tsla    pred:name "Tesla";
+                pred:symbol "TSLA";
+                pred:website "https://www.tesla.com/";
+                pred:wikidataRef "Q478214";
+                pred:revenue   [
+                    pred:revenueValues  [
+                                            pred:Year "2015";
+                                            pred:Value "4046024000"
+                                        ],
+                                        [
+                                            pred:Year "2014";
+                                            pred:Value "3198356000 "
+                                        ],
+                                        [
+                                            pred:Year "2016";
+                                            pred:Value "7000132000"
+                                        ],
+                                        [
+                                            pred:Year "2017";
+                                            pred:Value "11758751000"
+                                        ]
+                ];
+                pred:industry "automotive industry";
+                pred:ceo ceo:elon_musk;
+                pred:foundedBy "Elon Musk";
+                pred:foundingYear "2003";
+                pred:country "United States of America";
+                pred:description "American automotive, energy storage and solar power company";
+                pred:logo "tsla.png";
+                a "company".
+
+ceo:elon_musk   pred:name "Elon Musk";
+                pred:photo "elon_musk.jpg";
+                pred:description "South African-born American entrepreneur";
+                pred:sex "male";
+                pred:nationality "South Africa";
+                pred:nationality "Canada";
+                pred:nationality "United States of America";
+                pred:birth "28 June 1971";
+                pred:worth "14200000000";
+                pred:wikidataRef "Q317521";
+                a "ceo".
+
+user:1  pred:idUser "1";
+        pred:name "Antonio MoneyBags";
+        pred:favCompany company:tsla;
+        pred:favCompany company:amd;
+        pred:favCeo ceo:elon_musk;
+        a "user".
+
+coin:usd    pred:coinCode "usd";
+            pred:coinSymbol "$";
+            a "coin".
+coin:eur    pred:coinCode "eur";
+            pred:coinSymbol "€";
+            a "coin".
+
+company:amd pred:name "Advanced Micro Devices";
+            pred:symbol "AMD";
+            pred:website "https://www.amd.com/";
+            pred:wikidataRef "Q128896";
+            pred:revenue   [
+                pred:revenueValues  [
+                                        pred:Year "2017";
+                                        pred:Value "5330000000"
+                                    ]
+            ];
+            pred:industry "electrical industry";
+            pred:ceo ceo:lisa_su;
+            pred:foundedBy "Jack Gifford";
+            pred:foundingYear "1969";
+            pred:country "United States of America";
+            pred:description "American multinational semiconductor company";
+            pred:logo "310px-AMD_Logo.svg.png";
+            a "company".
+
+ceo:lisa_su pred:name "Lisa Su";
+            pred:photo "510px-AMD_CEO_Lisa_Su_20130415_cropped.jpg";
+            pred:description "American chief executive officer and entrepreneur";
+            pred:sex "female";
+            pred:nationality "United States of America";
+            pred:birth "November 1969";
+            pred:worth "Unknown";
+            pred:wikidataRef "Q18207172";
+            a "ceo".

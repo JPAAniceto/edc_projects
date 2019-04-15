@@ -1,0 +1,5 @@
+*.pyc
+proj1/.idea/misc.xml
+proj1/.idea/proj1.iml
+proj1/.idea/*
+.idea/*

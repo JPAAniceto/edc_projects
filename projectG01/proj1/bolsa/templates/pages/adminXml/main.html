@@ -1,0 +1,55 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+
+{% block title %}
+Admin XML - Bolsa Client
+{% endblock %}
+
+{% block navbar-admin-active %}
+active
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col s12 m6">
+                <h2 class="center" style="margin-bottom: 50px">Export DB</h2>
+                <div class="row">
+                    <div class="row center">
+                        <a class="waves-effect waves-light btn-large" href="/adminxml/export/all"><i
+                                class="material-icons left">file_download</i>Export All Files</a>
+                    </div>
+                    <div class="divider" style="margin-bottom: 30px; margin-top: 30px"></div>
+                    <div class="row center">
+                        <a class="waves-effect waves-light btn" href="/adminxml/export/days.xml"><i
+                                class="material-icons left">cloud_download</i>Export days.xml</a>
+                    </div>
+                    <div class="row center">
+                        <a class="waves-effect waves-light btn" href="/adminxml/export/coins.xml"><i
+                                class="material-icons left">cloud_download</i>Export coins.xml</a>
+                    </div>
+                    <div class="row center">
+                        <a class="waves-effect waves-light btn" href="/adminxml/export/companies.xml"><i
+                                class="material-icons left">cloud_download</i>Export companies.xml</a>
+                    </div>
+                    <div class="row center">
+                        <a class="waves-effect waves-light btn" href="/adminxml/export/portefolios.xml"><i
+                                class="material-icons left">cloud_download</i>Export portefolios.xml</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <h2 class="center" style="margin-bottom: 50px">Admin Actions</h2>
+                <div class="row center" style="margin-bottom: 50px">
+                        <a class="waves-effect waves-light btn" href="/adminxml/submit/update"><i
+                                class="material-icons left">add_circle</i>Add an update (day)</a>
+                </div>
+                <div class="row center" style="margin-bottom: 50px">
+                        <a class="waves-effect waves-light btn" href="/adminxml/submit/company"><i
+                                class="material-icons left">add_circle</i>Add a company</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

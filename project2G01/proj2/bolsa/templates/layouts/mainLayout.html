@@ -1,0 +1,69 @@
+{% load static %}
+{% load coinTags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Wiki Company {% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" href="{%  static 'images/favicon.ico' %}">
+    <script src="{% static 'js/sorttable.js' %}"></script>
+</head>
+<body class="blue-grey lighten-5">
+<ul id="dropdown1" class="dropdown-content" xmlns:coin="http://wikicompany.pt/coin/" xmlns:pred="http://wikicompany.pt/pred/">
+    {% getCoins as coins %}
+    {% for coin in coins %}
+    <li about="coin:{{ coin.code }}" typeof="coin" property="pred:coinSymbol"><a href="/selectCoin/{{ coin.code }}/?last={{ request.path }}">{{ coin.symbol }}</a></li>
+    {% endfor %}
+</ul>
+<nav class="blue-grey">
+  <div class="nav-wrapper">
+
+    <a href="/" class="brand-logo right">Wiki Company<i style="font-size: 4rem;" class="material-icons right">attach_money</i></a>
+    <ul class="left hide-on-med-and-down">
+        <li class="{% block navbar-home-active %}{% endblock %}"><a href="/"><i class="material-icons left">home</i>Home</a></li>
+        <li class="{% block navbar-companies-active %}{% endblock %}"><a href="/companies"><i class="material-icons left">business</i>Companies</a></li>
+        <li class="{% block navbar-ceos-active %}{% endblock %}"><a href="/ceos/"><i class="material-icons left">assignment_ind</i>CEOs</a></li>
+        <li class="{% block navbar-values-active %}{% endblock %}"><a href="/values/"><i class="material-icons left">timeline</i>Values</a></li>
+        <li class="{% block navbar-profile-active %}{% endblock %}"><a href="/profile"><i
+                class="material-icons left">account_balance_wallet</i>My Profile</a></li>
+        {% if request.user.is_superuser %}
+            <li class="{% block navbar-admin-active %}{% endblock %}"><a href="/admin/main"><i class="material-icons left">how_to_reg</i>Admin</a></li>
+        {% endif %}
+
+
+    </ul>
+        <ul class="right" style="margin-right: 320px">
+        {% if request.user.is_authenticated %}
+            <li><button class="btn waves-effect red darken-4">
+                <a href="/accounts/logout_view/">Logout</a>
+                <i class="material-icons left">exit_to_app</i>
+            </button></li>
+        {% endif %}
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">
+              {% if request.session.selected_coin %}
+                  {% getCoinSymbol request.session.selected_coin %}
+              {% else %}
+                  $
+              {% endif %}
+              <i class="material-icons right">arrow_drop_down</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+{% block body %}
+{% endblock %}
+
+{% include 'components/loadScripts.html' %}
+
+{% block chartConfiguration %}
+{% endblock %}
+
+{% block materializeStarts %}
+{% endblock %}
+
+<script>$(".dropdown-trigger").dropdown();</script>
+
+
+</body>
+</html>

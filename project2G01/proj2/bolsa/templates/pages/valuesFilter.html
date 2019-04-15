@@ -1,0 +1,136 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% load coinTags %}
+{% load numberTags %}
+
+{% block title %}
+   Values - Wiki Company
+{% endblock %}
+
+{% block navbar-values-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top:50px">
+        <h4 style="margin-bottom: 30px">Companies revenue historical</h4>
+        <div class="row">
+            <h5 style="margin-bottom: 30px">Select/Filter Data</h5>
+            <form action="/values/" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <form action="" method="post">
+                {% csrf_token %}
+                <div class="input-field col s6">
+
+                    <input id="searchQuery" type="text" class="validate" name="searchQuery">
+                    <label for="searchQuery">Search by company name/symbol</label>
+                </div>
+                <div class="col s12">
+                    <ul class="collapsible">
+                        <li class="white">
+                            <div class="collapsible-header"><i class="material-icons">search</i>Advanced Search</div>
+                            <div class="collapsible-body row">
+                                <div class="input-field col s6">
+                                    <input id="searchIndustryQuery" type="text" class="validate" name="searchIndustry">
+                                    <label for="searchIndustryQuery">Search by Industry</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="searchCEOQuery" type="text" class="validate" name="searchCEO">
+                                    <label for="searchCEOQuery">Search by CEO</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="searchFounderQuery" type="text" class="validate" name="searchFounder">
+                                    <label for="searchFounderQuery">Search by Founder</label>
+                                </div>
+                                <div class="input-field col s6">
+
+                                    <input id="searchFoundyearQuery" type="number" class="validate" min="0" name="searchFoundYear">
+                                    <label for="searchFoundyearQuery">Search by Foundation Year</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="searchCountryQuery" type="text" class="validate" name="searchCountry">
+                                    <label for="searchCountryQuery">Search by Country</label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="input-field col s12 center">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+                </div>
+            </form>
+        </div>
+        <div class="row card">
+            <canvas id="searchChart" width="600" height="250"></canvas>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block chartConfiguration %}
+
+    <script>
+        var ctx = document.getElementById("searchChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+
+                labels: [
+                    {% for year in years %}
+                        {{ year }},
+                    {% endfor %}
+                ],
+                datasets: [
+                         {% for k,v in values.items %}
+
+                        {
+                        label: '{{ k }}',
+                        data: [
+                            {% for value in v %}
+                                {{ value.1 }},
+                            {% endfor %}
+                        ],
+                        fill: false,
+                        {% randomInt 0 255 as color1 %}{% randomInt 0 255 as color2 %}{% randomInt 0 255 as color3 %}
+                        borderColor: 'rgb({{ color1 }},{{ color2 }},{{ color3 }})',
+                        backgroundColor: 'rgb({{ color1 }},{{ color2 }},{{ color3 }})'
+                    },
+                    {% endfor %}
+                ]
+            },
+            options: {
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            return value.toLocaleString() + "{% getCoinSymbol request.session.selected_coin %}";
+                        }
+                    } // end callbacks:
+                }, //end tooltips
+                "scales": {
+                    "yAxes": [{
+                        "ticks": {
+                            "beginAtZero": true,
+                            callback: function (value, index, values) {
+                                return value.toLocaleString() + "{% getCoinSymbol request.session.selected_coin %}";
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block materializeStarts %}
+    <script>
+        $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+    </script>
+{% endblock %}

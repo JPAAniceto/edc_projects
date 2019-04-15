@@ -1,0 +1,191 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% block title %}
+    {% if type == "companies" %}
+        Companies - Bolsa Client
+    {% else %}
+        CEOs - Bolsa Client
+    {% endif %}
+
+{% endblock %}
+
+{% block navbar-profile-active %}
+    active
+{% endblock %}
+
+{% block body %}
+
+<!-- The Grid -->
+
+<div class="w3-row-padding"; style="margin-top:70px">
+
+    <!-- Left Column -->
+    <div class="w3-third " xmlns:user="http://wikicompany.pt/user/" xmlns:pred="http://wikicompany.pt/pred/" xmlns:ceo="http://wikicompany.pt/ceo/" xmlns:company="http://wikicompany.pt/company/">
+       <div class="w3-container card w3-white w3-margin-bottom">
+            <h3 style="text-align: center;">Suggestions</h3>
+            <div style="text-align: center;">
+                {% if type == "companies" %}
+                   {% if suggestions %}
+                        <table class="sortable highlight" >
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Symbol</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for company in suggestions %}
+                                <tr about="company:{{ company.companySymbol|lower }}" typeof="company">
+                                <td>
+                                    <span property="pred:name"><a href="/companies/{{ company.companySymbol }}">{{ company.companyName }}</a></span>
+                                </td>
+                                <td>
+                                    <span property="pred:symbol"><a href="/companies/{{ company.companySymbol }}">{{ company.companySymbol }}</a></span>
+                                </td>
+                                <td>
+                                    <a href="/favorite/company/{{ company.companySymbol }}/?last={{ request.path }}"><i  style="color: #fdd835;font-size: 2rem;display: block;"
+                                    class="material-icons right" id="favIcon"
+                                    onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="text-align: center">No Companies Suggestions</h4>
+                    {% endif %}
+                {% else %}
+                    {% if suggestions %}
+                        <table class="sortable highlight" >
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Worth</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for ceo in suggestions %}
+                                <tr about="{{ ceo.ceo }}" typeof="ceo">
+                                <td>
+                                    <span property="pred:name"><a href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoName }}</a></span>
+                                </td>
+                                <td>
+                                    <span property="pred:worth"><a href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoWorth }}</a></span>
+                                </td>
+                                <td>
+                                    <a href="/favorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}">
+                                        <i  style="color: #fdd835;font-size: 2rem;"
+                                        class="material-icons" id="favIcon"
+                                        onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="text-align: center">No CEOs Suggestions</h4>
+                    {% endif %}
+                {% endif %}
+
+                <br>
+                <button class="btn waves-effect red darken-4">
+                    <a href="/profile/">Go Back</a>
+                    <i class="material-icons left">arrow_back</i>
+                </button>
+                <br>
+                <br>
+            </div>
+        </div>
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+
+    <div class="w3-twothird card">
+
+        <!-- Full table-->
+        <h3 style="text-align: center;">
+            {% if type == "companies" %}
+                Companies
+            {% else %}
+                CEOs
+            {% endif %}
+        </h3>
+        <table class="sortable highlight">
+            <thead>
+            <tr>
+                {%  if type == "companies" %}
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Revenue 2017</th>
+                {% else %}
+                    <th>Name</th>
+                    <th>Birth</th>
+                    <th>Worth</th>
+                {% endif %}
+            </tr>
+            </thead>
+
+            <tbody>
+                {% for item in items %}
+                    {%  if type == "companies" %}
+                        <tr about="company:{{ item.companySymbol|lower }}" typeof="company">
+                        <td>
+                            <span property="pred:name"><a href="/companies/{{ item.companySymbol }}">{{ item.companyName }}</a></span>
+                        </td>
+                        <td>
+                            <span property="pred:symbol"><a href="/companies/{{ item.companySymbol }}">{{ item.companySymbol }}</a></span>
+                        </td>
+                        {% if item.revenueValue %}
+                        <td>
+                            <span rel="pred:revenue">
+                                <span rel="pred:revenueValues">
+                                    <span property="pred:Value">
+                                        <a href="/companies/{{ company.companySymbol }}">{{ company.revenueValue }}</a>
+                                    </span>
+                                    <span property="pred:Year" hidden>2017</span>
+                                </span>
+                            </span>
+                        </td>
+                        {% else %}
+                        <td>
+                            <span rel="pred:revenue">
+                                <span rel="pred:revenueValues">
+                                    <span property="pred:Value">
+                                        <a href="/companies/{{ company.companySymbol }}">Unknown</a>
+                                    </span>
+                                    <span property="pred:Year" hidden>2017</span>
+                                </span>
+                            </span>
+                        </td>
+                        {% endif %}
+                        <td><a href="/unfavorite/company/{{ item.companySymbol }}/?last={{ request.path }}"><i style="color:#e53935" class="material-icons right">clear</i></a></td>
+                        </tr>
+                    {% else %}
+                        <tr about="{{ item.ceo }}" typeof="ceo">
+                        <td>
+                            <a href="/ceos/{{ item.ceoName }}"><span property="pred:name">{{ item.ceoName }}</span></a>
+                        </td>
+                        <td>
+                            <a href="/ceos/{{ item.ceoName }}"><span property="pred:birth">{{ item.ceoBirth }}</span></a>
+                        </td>
+                        <td>
+                            <a href="/ceos/{{ item.ceoName }}"><span property="pred:worth">{{ item.ceoWorth }}</span></a>
+                        </td>
+                        <td><a href="/unfavorite/ceo/{{ item.ceoName }}/?last={{ request.path }}"><i style="color:#e53935" class="material-icons right">clear</i></a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+    <!-- End Right Column -->
+</div>
+
+<!-- End Grid -->
+</div>
+{% endblock %}

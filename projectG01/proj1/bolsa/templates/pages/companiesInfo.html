@@ -1,0 +1,151 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+{% load randomGen %}
+
+{% block title %}
+
+    company details - Bolsa Client
+
+{% endblock %}
+
+{% block navbar-companies-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    <!-- The Grid -->
+
+    <div class="w3-row-padding" ; style="margin-top:70px">
+
+        <!-- Left Column -->
+        <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">
+                <div class="w3-display-container">
+                    <br>
+                    <img src="{% static "images/" %}{{ company.logo }}"
+                         style=" display: block;margin-left: auto;margin-right: auto; max-width:150px; max-height:100px "
+                         alt="Avatar">
+                    <br>
+                </div>
+                <div class="w3-container">
+
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-black">{{ company.name }}
+                        ({{ company.symbol }})</i></p>
+                    <hr>
+
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Company
+                        Information</b></p>
+                    <h4>Foundation year: </h4>
+                    <a>{{ company.year }}</a>
+                    <h4>Field : </h4>
+                    <a>{{ company.type }}</a>
+                    <h4>Description : </h4>
+                    <a>{{ company.description }}</a>
+                    <!-- <h4>Value : </h4>
+            <a>{{ company.value }}$</a>
+            -->
+                    <br>
+
+                    <br>
+                </div>
+
+            </div>
+            <br>
+            <div class="w3-container">
+                <button type="button" class="w3-button w3-blue ">
+                    <a href="/rssfeed/{{ company.symbol }}">See the latest news!</a>
+                    <i class="material-icons left">rss_feed</i>
+                </button>
+            </div>
+
+            <!-- End Left Column -->
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <canvas id="searchChart" width="600" height="250"></canvas>
+                <br>
+            </div>
+
+
+        </div>
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-black">Buy {{ company.name }}
+                    Shares </i></p>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="input-field col s6">
+                        <input id="addmoney" type="number" name="quantitySell" class="validate" min="1" value="1">
+                        <label for="BuyShares">How many shares would you like to buy?</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <button class="btn waves-effect waves-light" type="submit" name="action"
+                                style=" display: block; margin-right: 0px;margin-left: auto;">
+                            Buy
+                            <i class="material-icons right">business_center</i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+        <!-- End Right Column -->
+    </div>
+
+    <!-- End Grid -->
+    </div>
+{% endblock %}
+
+{% block chartConfiguration %}
+{% getCoinSymbol request.session.selectedCoin as coinSymbol %}
+{% getCoinValue request.session.selectedCoin as coinValue %}
+
+    <script>
+        var ctx = document.getElementById("searchChart");
+        var dates = [];
+        {% for date in dates %}
+            dates.push("{{  date }}");
+        {% endfor %}
+
+        var lbl = "{{company.symbol}}";
+
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: lbl,
+                        data: [
+                            {% for value in values %}
+                                {% multiplyDouble value coinValue %},
+                            {% endfor %}
+                        ],
+                        fill: false,
+                        borderColor: 'rgb(0,0,255)'
+
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return value + "{{ coinSymbol }}";
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

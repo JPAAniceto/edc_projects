@@ -1,0 +1,231 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+{% block title %}
+    Profile - Wiki Company
+{% endblock %}
+
+{% block navbar-profile-active %}
+    active
+{% endblock %}
+
+{% block body %}
+
+    <!-- The Grid -->
+    <div class="container" style="margin-top:50px"  xmlns:user="http://wikicompany.pt/user/" xmlns:pred="http://wikicompany.pt/pred/" xmlns:ceo="http://wikicompany.pt/ceo/" xmlns:company="http://wikicompany.pt/company/">
+    <h4 style="margin-bottom: 30px">Profile of <b about="user:{{ request.user.id }}" typeof="user" property="pred:name">{{ user.userName }}</b></h4>
+
+    <div class="w3-row-padding" ; style="margin-top:70px">
+        <!-- Left Column -->
+        <div class="w3-third">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                    <h3 style="text-align: center;">Suggestions</h3>
+                    <div class="divider"></div>
+                    <br>
+                    {% if companies_suggestion %}
+                        <h4 style="text-align: center">Companies</h4>
+                        <table class="sortable highlight" >
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Symbol</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for company in companies_suggestion %}
+                                <tr about="company:{{ company.companySymbol|lower }}" typeof="company">
+                                <td>
+                                    <span property="pred:name"><a href="/companies/{{ company.companySymbol }}">{{ company.companyName }}</a></span>
+                                </td>
+                                <td>
+                                    <span property="pred:symbol"><a href="/companies/{{ company.companySymbol }}">{{ company.companySymbol }}</a></span>
+                                </td>
+                                <td>
+                                    <a href="/favorite/company/{{ company.companySymbol }}/?last={{ request.path }}"><i  style="color: #fdd835;font-size: 2rem;display: block;"
+                                    class="material-icons right" id="favIcon"
+                                    onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="text-align: center">No Companies Suggestions</h4>
+                    {% endif %}
+                    <div class="col-s6" style="text-align: center;">
+                        <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                            <a href="/seefull/companies">
+                                Show more
+                            </a>
+                        </button>
+                    </div>
+                    <br>
+                    <div class="divider"></div>
+                    <br>
+
+                    {% if ceos_suggestion %}
+                        <h4 style="text-align: center">CEOs</h4>
+                        <table class="sortable highlight" >
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Worth</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for ceo in ceos_suggestion %}
+                                <tr about="{{ ceo.ceo }}" typeof="ceo">
+                                <td>
+                                    <span property="pred:name"><a  href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoName }}</a></span>
+                                </td>
+                                <td>
+                                    <span property="pred:worth"><a  href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoWorth }}</a></span>
+                                </td>
+                                <td>
+                                    <a href="/favorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}">
+                                        <i  style="color: #fdd835;font-size: 2rem;"
+                                        class="material-icons" id="favIcon"
+                                        onmouseover="mouseOver()" onmouseout="mouseOut()">star_border</i>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="text-align: center">No CEOs Suggestions</h4>
+                    {% endif %}
+                    <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/ceos">
+                            Show more
+                        </a>
+                    </button>
+                    </div>
+                    <br>
+
+            </div>
+            <br>
+
+            <!-- End Left Column -->
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 style="text-align: center;">Favorites</h3>
+                <div class="divider"></div>
+                <br>
+                <h4 style="text-align: center">Companies</h4>
+                <table class="sortable highlight" >
+                    <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Symbol</th>
+                        <th>Revenue 2017</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for company in companies|slice:":3" %}
+                    <tr about="{{ company.company }}" typeof="company">
+                        <td>
+                            <span property="pred:name"><a href="/companies/{{ company.companySymbol }}">{{ company.companyName }}</a></span>
+                        </td>
+                        <td>
+                            <span property="pred:symbol"><a href="/companies/{{ company.companySymbol }}">{{ company.companySymbol }}</a></span>
+                        </td>
+                        {% if company.revenueValue %}
+                        <td>
+                            <span rel="pred:revenue">
+                                <span rel="pred:revenueValues">
+                                    <span property="pred:Value">
+                                        <a href="/companies/{{ company.companySymbol }}">{{ company.revenueValue }}</a>
+                                    </span>
+                                    <span property="pred:Year" hidden>2017</span>
+                                </span>
+                            </span>
+                        </td>
+                        {% else %}
+                            <td>
+                            <span rel="pred:revenue">
+                                <span rel="pred:revenueValues">
+                                    <span property="pred:Value">
+                                        <a href="/companies/{{ company.companySymbol }}">Unknown</a>
+                                    </span>
+                                    <span property="pred:Year" hidden>2017</span>
+                                </span>
+                            </span>
+                        </td>
+                        {% endif %}
+                        <td><a href="/unfavorite/company/{{ company.companySymbol }}/?last={{ request.path }}"><i style="color:#e53935" class="material-icons right">clear</i></a></td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/companies">
+                            Show more
+                        </a>
+                    </button>
+                </div>
+                <br>
+                <div class="divider"></div>
+                <br>
+                <h4 style="text-align: center">CEOs</h4>
+                <table class="sortable highlight">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birth</th>
+                        <th>Worth</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for ceo in ceos|slice:":3" %}
+                    <tr about="{{ ceo.ceo }}" typeof="ceo">
+                        <td>
+                            <span property="pred:name"><a href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoName }}</a></span>
+                        </td>
+                        <td>
+                            <span property="pred:birth"><a href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoBirth }}</a></span>
+                        </td>
+                        <td>
+                            <span property="pred:worth"><a href="/ceos/{{ ceo.ceoName }}">{{ ceo.ceoWorth }}</a></span>
+                        </td>
+                        <td><a href="/unfavorite/ceo/{{ ceo.ceoName }}/?last={{ request.path }}"><i style="color:#e53935" class="material-icons right">clear</i></a></td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/ceos">
+                            Show more
+                        </a>
+                    </button>
+                </div>
+            </div>
+
+            <!-- End Right Column -->
+        </div>
+
+        <!-- End Grid -->
+
+    </div>
+{% endblock %}
+
+</div>

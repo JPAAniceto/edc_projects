@@ -1,0 +1,272 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load randomGen %}
+{% load static %}
+
+{% block title %}
+    Portfolio - Bolsa Client
+{% endblock %}
+
+{% block navbar-portfolio-active %}
+    active
+{% endblock %}
+
+{% block body %}
+    {% getCoinSymbol request.session.selectedCoin as coinSymbol %}
+    {% getCoinValue request.session.selectedCoin as coinValue %}
+
+    <!-- The Grid -->
+    <div class="container" style="margin-top:50px">
+    <h4 style="margin-bottom: 30px">Portfolio
+
+    </h4>
+    <div class="w3-row-padding" ; style="margin-top:70px">
+        <!-- Left Column -->
+        <div class="w3-third">
+
+            <div class="w3-white w3-text-grey w3-card-4">
+                <div class="w3-container">
+                    <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-black">{{ user.name }}</i></p>
+                    <hr>
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Portfolio
+                        Value</b></p>
+
+                    <a>{% multiplyDouble portfolio_value coinValue %}{{ coinSymbol }}</a>
+
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Available
+                        Money</b></p>
+                    <a>{% multiplyDouble user.money coinValue %}{{ coinSymbol }}</a>
+
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Add more
+                        money</b></p>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="input-field col s6">
+                            <input id="addmoney" type="number" class="validate" min="1" value="1" name="moneyToAdd">
+                            <label for="addmoney">Money quantity</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Add
+                                <i class="material-icons right">add</i>
+                            </button>
+                        </div>
+                    </form>
+                    <br>
+                    <button class="btn waves-effect red darken-4">
+                        <a href="/accounts/logout_view/">Logout</a>
+                        <i class="material-icons right">exit_to_app</i>
+                    </button>
+                    <br>
+
+                    <br>
+                </div>
+            </div>
+            <br>
+
+            <!-- End Left Column -->
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 style="text-align: center;">Overview</h3>
+
+                    <p id="toggle" style="text-align: center;">
+                        <span>
+                            <label class="btn btn-primary active">
+                                <input type="radio" name="options" id="option1"> Amount
+                            </label>
+                        </span>
+                        <span>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="options" id="option2"> Value
+                            </label>
+                        </span>
+                    </p>
+                    <div id="left"> <canvas id="searchChart" width="600" height="250"></canvas> </div>
+                    <div id="right" style="display:none;"> <canvas id="searchChart_money" width="600" height="250"></canvas> </div>
+
+            </div>
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 style="text-align: center;">Wallet</h3>
+                <table class="sortable">
+                    <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th class="sorttable_numeric">Amount</th>
+                        <th class="sorttable_numeric">Value</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for stock in wallet|slice:":3" %}
+                        <tr>
+                            <td><a href="/companies/{{ stock.symbol }}">{{ stock.symbol }}</a></td>
+                            <td>{{ stock.amount }}</td>
+                            <td>{% multiplyTriple stock.amount stock.value coinValue %}{{ coinSymbol }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/Wallet-{{ company.symbol }}">
+                            Show more
+                        </a>
+                    </button>
+                </div>
+                <div class="input-field col s6">
+                    <a class="btn waves-effect waves-light" href="/companies" style="width:100%">
+                        Buy
+                        <i class="material-icons right">business_center</i>
+                    </a>
+                </div>
+
+                <div class="input-field col s6">
+                    <a class="btn waves-effect waves-light" href="/sell" style="width:100%">
+                        Sell
+                        <i class="material-icons right">attach_money</i>
+                    </a>
+                </div>
+                <br>
+
+            </div>
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 style="text-align: center;">Sells</h3>
+                <table class="sortable">
+                    <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Date</th>
+                        <th class="sorttable_numeric">Amount</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for sell in sells|slice:":3" %}
+                        <tr>
+                            <td><a href="/companies/{{ sell.symbol }}">{{ sell.symbol }}</a></td>
+                            <td>{{ sell.date }}</td>
+                            <td>{{ sell.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/Sells-{{ company.symbol }}">
+                            Show more
+                        </a>
+                    </button>
+                </div>
+
+            </div>
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 style="text-align: center;">Purchases</h3>
+                <table class="sortable">
+                    <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Date</th>
+                        <th class="sorttable_numeric">Amount</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for buy in buys|slice:":3" %}
+                        <tr>
+                            <td><a href="/companies/{{ buy.symbol }}">{{ buy.symbol }}</a></td>
+                            <td>{{ buy.date }}</td>
+                            <td>{{ buy.amount }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="col-s6" style="text-align: center;">
+                    <button type="button" class="btn btn-link " style="margin-top: 10px; margin-bottom: 10px">
+                        <a href="/seefull/Buys-{{ company.symbol }}">
+                            Show more
+                        </a>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- End Right Column -->
+        </div>
+
+        <!-- End Grid -->
+
+    </div>
+{% endblock %}
+
+{% block chartConfiguration %}
+    {% getCoinSymbol request.session.selectedCoin as coinSymbol %}
+    {% getCoinValue request.session.selectedCoin as coinValue %}
+
+    <script>
+        var ctx = document.getElementById("searchChart");
+        var ctxm = document.getElementById("searchChart_money");
+        var symbols = [];
+        var amounts = [];
+        var values = [];
+        var colors = [];
+
+        {% for stock in wallet %}
+            symbols.push("{{  stock.symbol }}");
+            amounts.push({{  stock.amount }});
+            values.push({% multiplyTriple stock.amount stock.value coinValue %});
+            colors.push('rgb({% randomInt 0 255 %},{% randomInt 0 255 %},{% randomInt 0 255 %})');
+        {% endfor %}
+
+        var myLineChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: symbols,
+                datasets: [
+                    {
+                        data: amounts,
+                        backgroundColor: colors
+                    },
+                ]
+            },
+            options: {}
+        });
+
+        var myLineChartm = new Chart(ctxm, {
+            type: 'doughnut',
+            data: {
+                labels: symbols,
+                datasets: [
+                    {
+                        data: values,
+                        backgroundColor: colors
+                    },
+                ]
+            },
+            options: {}
+        });
+    </script>
+
+    <script>
+        $(function() {
+            $('#toggle > span').click(function() {
+                var ix = $(this).index();
+
+                $('#left').toggle( ix === 0 );
+                $('#right').toggle( ix === 1 );
+            });
+        });
+    </script>
+
+
+
+{% endblock %}
+
+
+
+</div>

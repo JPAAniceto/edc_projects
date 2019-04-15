@@ -1,0 +1,25 @@
+{% extends 'layouts/mainLayout.html' %}
+{% load static %}
+
+{% block title %}
+Logout Account - Bolsa Client
+{% endblock %}
+
+{% block navbar-portfolio-active %}
+active
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top:50px">
+<div class="row">
+    <h3 style="margin-bottom: 30px">Logout</h3>
+</div>
+<div class="row">
+    Logout Successful
+</div>
+<div class="row">
+    <button type="button" class="w3-button w3-green">
+            <a href="/accounts/login/">Go Back</a>
+    </button>
+</div>
+{% endblock %}
